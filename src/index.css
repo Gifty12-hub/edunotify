@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color tokens -- Ghanaian-textile inspired, education-trust palette */
+  --color-ink: #14232B;
+  /* near-black navy for text */
+  --color-indigo: #1B3A4B;
+  /* primary brand — deep education blue */
+  --color-indigo-light: #2C5468;
+  --color-gold: #D4A24C;
+  /* brushed gold — the "notification" accent */
+  --color-gold-light: #E8C384;
+  --color-clay: #C1622D;
+  /* terracotta — secondary accent, warnings/highlights */
+  --color-sage: #7E9A85;
+  /* muted sage — confirmation / success */
+  --color-ivory: #FBF8F2;
+  /* page background */
+  --color-ivory-deep: #F3EEE2;
+  --color-line: #E4DDCB;
+  /* hairline borders on ivory */
+
+  --font-display: "Sora", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
