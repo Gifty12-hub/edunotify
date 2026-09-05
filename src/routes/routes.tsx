@@ -1,0 +1,34 @@
+import type { ReactNode } from "react";
+import Home from "../pages/Home";
+import About from "../pages/About";
+import Contact from "../pages/Contact";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
+import Dashboard from "../pages/Dashboard";
+
+export interface AppRoute {
+  path: string;
+  element: ReactNode;
+}
+
+/**
+ * Public pages — anyone can view these, logged in or not. Rendered inside
+ * UnauthLayout (Navbar + Footer). Add a new public page by adding one line
+ * here; AppRoutes.tsx maps over this array so nothing else needs to change.
+ */
+export const publicRoutes: AppRoute[] = [
+  { path: "/", element: <Home /> },
+  { path: "/about", element: <About /> },
+  { path: "/contact", element: <Contact /> },
+  { path: "/login", element: <Login /> },
+  { path: "/signup", element: <Signup /> },
+];
+
+/**
+ * Protected pages — only reachable once ProtectedRoute confirms the user
+ * is authenticated. Rendered inside AuthLayout (Sidebar). Add new
+ * dashboard pages here as they're built.
+ */
+export const protectedRoutes: AppRoute[] = [
+  { path: "/dashboard", element: <Dashboard /> },
+];

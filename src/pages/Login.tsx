@@ -1,7 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { FormShell, FormField, SubmitButton } from "../components/Form";
+import { useAuth } from "../context/AuthContext";
 
 interface LoginValues {
   email: string;
@@ -11,7 +12,10 @@ interface LoginValues {
 export default function Login() {
   const [values, setValues] = useState<LoginValues>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
+  navigate("/dashboard", { state: { justLoggedIn: true } });
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
 
@@ -19,11 +23,12 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     // TODO: replace with a real authentication request once the backend
-    // (auth service / API) is available. Keeping this as a stub for now
-    // so the UI flow can be demoed end to end.
+    // (auth service / API) is available. For now, any submit "logs in"
+    // so the authenticated route pattern can be demoed end to end.
     setTimeout(() => {
       setLoading(false);
-      console.log("Login submitted:", values);
+      login();
+      navigate("/dashboard");
     }, 900);
   };
 
