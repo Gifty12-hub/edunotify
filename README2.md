@@ -241,5 +241,4 @@ safer as the codebase grows past a single contributor.
 
 ---
 
-Built by Gifty Akosua Arkoh as part of the Women Techsters Digital
-Accelerator programme.
+Built by Gifty Akosua Arkoh as part of the Women Techster Sprint programme.
