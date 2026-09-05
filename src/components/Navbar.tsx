@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
 import { Menu, X, BellRing } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
   { to: "/", label: "Home" },
@@ -10,6 +11,7 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { isAuthenticated, user } = useAuth();
 
   const linkClass = ({ isActive }: NavLinkRenderProps) =>
     `text-sm font-medium transition-colors ${
@@ -23,9 +25,7 @@ export default function Navbar() {
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo text-gold">
             <BellRing size={18} strokeWidth={2.25} />
           </span>
-          <span className="font-display text-lg font-700 text-indigo">
-            EduNotify
-          </span>
+          <span className="font-display text-lg font-700 text-indigo">EduNotify</span>
         </NavLink>
 
         {/* Desktop links */}
@@ -35,18 +35,30 @@ export default function Navbar() {
               {l.label}
             </NavLink>
           ))}
-          <NavLink
-            to="/login"
-            className="text-sm font-medium text-ink/70 transition-colors hover:text-indigo"
-          >
-            Log in
-          </NavLink>
-          <NavLink
-            to="/signup"
-            className="rounded-full bg-indigo px-5 py-2.5 text-sm font-semibold text-ivory transition-colors hover:bg-indigo-light"
-          >
-            Get started
-          </NavLink>
+
+          {isAuthenticated && user ? (
+            <NavLink
+              to="/dashboard"
+              className="flex items-center gap-2 rounded-full bg-indigo/10 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-indigo transition-colors hover:bg-indigo/15"
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo text-xs font-700 text-ivory">
+                {user.firstName[0]}
+              </span>
+              {user.firstName}
+            </NavLink>
+          ) : (
+            <>
+              <NavLink to="/login" className="text-sm font-medium text-ink/70 transition-colors hover:text-indigo">
+                Log in
+              </NavLink>
+              <NavLink
+                to="/signup"
+                className="rounded-full bg-indigo px-5 py-2.5 text-sm font-semibold text-ivory transition-colors hover:bg-indigo-light"
+              >
+                Get started
+              </NavLink>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -75,16 +87,32 @@ export default function Navbar() {
                 {l.label}
               </NavLink>
             ))}
-            <NavLink to="/login" className="text-sm font-medium text-ink/70" onClick={() => setOpen(false)}>
-              Log in
-            </NavLink>
-            <NavLink
-              to="/signup"
-              className="rounded-full bg-indigo px-5 py-2.5 text-center text-sm font-semibold text-ivory"
-              onClick={() => setOpen(false)}
-            >
-              Get started
-            </NavLink>
+
+            {isAuthenticated && user ? (
+              <NavLink
+                to="/dashboard"
+                className="flex items-center gap-2 text-sm font-semibold text-indigo"
+                onClick={() => setOpen(false)}
+              >
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo text-xs font-700 text-ivory">
+                  {user.firstName[0]}
+                </span>
+                {user.firstName}
+              </NavLink>
+            ) : (
+              <>
+                <NavLink to="/login" className="text-sm font-medium text-ink/70" onClick={() => setOpen(false)}>
+                  Log in
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  className="rounded-full bg-indigo px-5 py-2.5 text-center text-sm font-semibold text-ivory"
+                  onClick={() => setOpen(false)}
+                >
+                  Get started
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       )}

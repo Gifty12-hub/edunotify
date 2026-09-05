@@ -1,60 +1,118 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock } from "lucide-react";
+import { User as UserIcon, Mail, Phone, Lock } from "lucide-react";
 import { FormShell, FormField, SubmitButton } from "../components/Form";
-import { useAuth } from "../context/AuthContext";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { signupRequest } from "../api/authApi";
+import type { AuthResponse } from "../types/auth";
 
-interface LoginValues {
+type Role = "parent" | "school";
+interface RoleOption {
+  value: Role;
+  label: string;
+}
+
+const roles: RoleOption[] = [
+  { value: "parent", label: "Parent / Guardian" },
+  { value: "school", label: "School administrator" },
+];
+
+interface SignupValues {
+  name: string;
   email: string;
+  phone: string;
   password: string;
 }
 
-export default function Login() {
-  const [values, setValues] = useState<LoginValues>({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+export default function Signup() {
+  const [role, setRole] = useState<Role>("parent");
+  const [values, setValues] = useState<SignupValues>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
   const navigate = useNavigate();
 
-  navigate("/dashboard", { state: { justLoggedIn: true } });
+  const { loading, isError, errMessage, isSuccess, successMessage, request } =
+    useApiRequest<AuthResponse>();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    // TODO: replace with a real authentication request once the backend
-    // (auth service / API) is available. For now, any submit "logs in"
-    // so the authenticated route pattern can be demoed end to end.
-    setTimeout(() => {
-      setLoading(false);
-      login();
-      navigate("/dashboard");
-    }, 900);
+
+    const result = await request(
+      () => signupRequest(values.name, values.email),
+      "Account created — you can now log in"
+    );
+
+    if (result) {
+      setTimeout(() => navigate("/login"), 1200);
+    }
   };
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <FormShell
-        title="Welcome back"
-        subtitle="Log in to your EduNotify dashboard."
+        title="Create your account"
+        subtitle="Tell us who you are so we can set up the right dashboard."
         onSubmit={handleSubmit}
         footer={
           <>
-            New to EduNotify?{" "}
-            <Link to="/signup" className="font-semibold text-indigo hover:text-indigo-light">
-              Create an account
+            Already have an account?{" "}
+            <Link to="/login" className="font-semibold text-indigo hover:text-indigo-light">
+              Log in
             </Link>
           </>
         }
       >
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-ink/80">I am signing up as a</span>
+          <div className="grid grid-cols-2 gap-2">
+            {roles.map((r) => (
+              <button
+                type="button"
+                key={r.value}
+                onClick={() => setRole(r.value)}
+                className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${
+                  role === r.value
+                    ? "border-indigo bg-indigo text-ivory"
+                    : "border-line bg-white text-ink/70 hover:border-indigo/50"
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <FormField
+          label="Full name"
+          name="name"
+          value={values.name}
+          onChange={handleChange}
+          placeholder={role === "school" ? "e.g. Kasoa Presby Basic School" : "e.g. Abena Owusu"}
+          icon={UserIcon}
+        />
         <FormField
           label="Email address"
           type="email"
           name="email"
           value={values.email}
           onChange={handleChange}
-          placeholder="you@school.edu.gh"
+          placeholder="you@example.com"
           icon={Mail}
+        />
+        <FormField
+          label="Phone number"
+          type="tel"
+          name="phone"
+          value={values.phone}
+          onChange={handleChange}
+          placeholder="0XX XXX XXXX"
+          icon={Phone}
         />
         <FormField
           label="Password"
@@ -62,19 +120,23 @@ export default function Login() {
           name="password"
           value={values.password}
           onChange={handleChange}
-          placeholder="••••••••"
+          placeholder="At least 8 characters"
           icon={Lock}
         />
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 text-ink/65">
-            <input type="checkbox" className="h-4 w-4 rounded border-line accent-indigo" />
-            Remember me
-          </label>
-          <Link to="/contact" className="font-medium text-indigo hover:text-indigo-light">
-            Forgot password?
-          </Link>
-        </div>
-        <SubmitButton loading={loading}>Log in</SubmitButton>
+
+        {isError && (
+          <p className="rounded-lg bg-clay/10 px-3 py-2 text-sm text-clay">{errMessage}</p>
+        )}
+        {isSuccess && (
+          <p className="rounded-lg bg-sage/10 px-3 py-2 text-sm text-sage">{successMessage}</p>
+        )}
+
+        <p className="text-xs leading-relaxed text-ink/50">
+          By creating an account you agree to be contacted on the channels
+          above with school and account notifications.
+        </p>
+
+        <SubmitButton loading={loading}>Create account</SubmitButton>
       </FormShell>
     </section>
   );

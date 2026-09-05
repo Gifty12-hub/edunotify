@@ -1,41 +1,81 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import type { AuthTokens, User } from "../types/auth";
+
+interface StoredSession {
+  user: User;
+  tokens: AuthTokens;
+}
 
 interface AuthContextValue {
+  user: User | null;
+  tokens: AuthTokens | null;
   isAuthenticated: boolean;
-  login: () => void;
+  setSession: (user: User, tokens: AuthTokens) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "edunotify_auth";
+const STORAGE_KEY = "edunotify_session";
+
+function readStoredSession(): StoredSession | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as StoredSession) : null;
+  } catch {
+    // Corrupt or missing localStorage data — treat as logged out.
+    return null;
+  }
+}
 
 /**
- * Mock authentication for now — there is no backend yet, so "logging in"
- * just flips a flag in localStorage so the state survives a page refresh.
- * TODO: replace login()/logout() with real calls to the auth API once it
- * exists, and swap isAuthenticated for a real session/token check.
+ * Global store for "who is logged in." The user + tokens live in React
+ * state (so the app re-renders when they change) and are mirrored into
+ * localStorage (so a page refresh doesn't log the person out — the
+ * lazy useState initializer below reads localStorage exactly once, on
+ * first mount).
+ *
+ * TODO: once a real backend exists, setSession should also be called
+ * after verifying the accessToken is still valid, and logout should call
+ * a real "invalidate this token" endpoint.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    () => localStorage.getItem(STORAGE_KEY) === "true"
-  );
+  const [session, setSessionState] = useState<StoredSession | null>(() => readStoredSession());
 
-  const login = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
-    setIsAuthenticated(true);
-  };
+  const setSession = useCallback((user: User, tokens: AuthTokens) => {
+    const next: StoredSession = { user, tokens };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    setSessionState(next);
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
-    setIsAuthenticated(false);
-  };
+    setSessionState(null);
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+  // useMemo keeps this object's identity stable across renders unless
+  // session/setSession/logout actually changed. Without it, every render
+  // of AuthProvider would create a brand-new object, and every component
+  // reading useAuth() would re-render even when nothing meaningful changed.
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user: session?.user ?? null,
+      tokens: session?.tokens ?? null,
+      isAuthenticated: session !== null,
+      setSession,
+      logout,
+    }),
+    [session, setSession, logout]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

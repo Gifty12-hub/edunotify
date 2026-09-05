@@ -4,7 +4,10 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 import Dashboard from "../pages/Dashboard";
+import Students from "../pages/Students";
 
 export interface AppRoute {
   path: string;
@@ -22,6 +25,8 @@ export const publicRoutes: AppRoute[] = [
   { path: "/contact", element: <Contact /> },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
 ];
 
 /**
@@ -31,4 +36,5 @@ export const publicRoutes: AppRoute[] = [
  */
 export const protectedRoutes: AppRoute[] = [
   { path: "/dashboard", element: <Dashboard /> },
+  { path: "/dashboard/students", element: <Students /> },
 ];
