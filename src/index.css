@@ -1,38 +1,50 @@
 @import "tailwindcss";
 
 @theme {
-  /* Color tokens -- Ghanaian-textile inspired, education-trust palette */
-  --color-ink: #14232B;
-  /* near-black navy for text */
-  --color-indigo: #1B3A4B;
-  /* primary brand — deep education blue */
-  --color-indigo-light: #2C5468;
-  --color-gold: #D4A24C;
-  /* brushed gold — the "notification" accent */
-  --color-gold-light: #E8C384;
-  --color-clay: #C1622D;
-  /* terracotta — secondary accent, warnings/highlights */
-  --color-sage: #7E9A85;
-  /* muted sage — confirmation / success */
-  --color-ivory: #FBF8F2;
-  /* page background */
-  --color-ivory-deep: #F3EEE2;
-  --color-line: #E4DDCB;
-  /* hairline borders on ivory */
+  --color-ink: #263238;
+  --color-indigo: #28554c;
+  --color-indigo-light: #3f7568;
+  --color-gold: #df8b54;
+  --color-gold-light: #edaa78;
+  --color-clay: #bd5d4d;
+  --color-sage: #5f806b;
+  --color-ivory: #fbf7ef;
+  --color-ivory-deep: #f1eadf;
+  --color-line: #ded4c5;
 
-  --font-display: "Sora", "Segoe UI", sans-serif;
-  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-display: "Avenir Next", "Trebuchet MS", sans-serif;
+  --font-body: "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--color-ivory);
 }
 
 body {
   background-color: var(--color-ivory);
+  background-image: radial-gradient(var(--color-line) 0.65px, transparent 0.65px);
+  background-size: 22px 22px;
   color: var(--color-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
 }
 
 h1,

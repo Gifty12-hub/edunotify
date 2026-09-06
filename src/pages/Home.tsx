@@ -106,8 +106,8 @@ export default function Home() {
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-2">
             {features.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="rounded-2xl border border-line bg-white p-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo/10 text-indigo">
+              <div key={title} className="rounded-xl border border-line border-l-4 border-l-gold bg-white p-6 shadow-[0_8px_24px_rgba(38,50,56,0.04)]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-indigo/10 text-indigo">
                   <Icon size={18} />
                 </span>
                 <h3 className="mt-4 font-display text-lg font-700 text-indigo">{title}</h3>

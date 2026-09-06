@@ -14,12 +14,12 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
 
   const linkClass = ({ isActive }: NavLinkRenderProps) =>
-    `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-      isActive ? "bg-indigo text-ivory" : "text-ink/65 hover:bg-white"
+    `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+      isActive ? "bg-indigo text-ivory shadow-sm" : "text-ink/65 hover:bg-white"
     }`;
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-r border-line bg-ivory px-4 py-6">
+    <aside className="flex w-64 shrink-0 flex-col border-r border-line bg-ivory-deep px-4 py-6">
       <div className="flex items-center gap-2 px-2">
         <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo text-gold">
           <BellRing size={18} strokeWidth={2.25} />

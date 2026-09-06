@@ -17,8 +17,9 @@ interface FormShellProps {
 
 export function FormShell({ title, subtitle, children, onSubmit, footer }: FormShellProps) {
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-line bg-white/60 p-8 shadow-sm shadow-indigo/5">
-      <h1 className="font-display text-2xl font-700 text-indigo">{title}</h1>
+    <div className="mx-auto w-full max-w-md rounded-xl border border-line bg-white p-8 shadow-[0_14px_35px_rgba(38,50,56,0.07)]">
+      <div className="mb-6 h-1 w-10 rounded-full bg-gold" />
+      <h1 className="font-display text-2xl font-700 tracking-[-0.02em] text-indigo">{title}</h1>
       {subtitle && <p className="mt-2 text-sm text-ink/60">{subtitle}</p>}
       <form onSubmit={onSubmit} className="mt-7 flex flex-col gap-5" noValidate>
         {children}
@@ -65,7 +66,7 @@ export function FormField({
           onChange={onChange}
           placeholder={placeholder}
           required={required}
-          className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/35 focus:border-indigo ${
+          className={`w-full rounded-md border bg-ivory px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/35 focus:border-indigo focus:bg-white ${
             Icon ? "pl-10" : ""
           } ${error ? "border-clay" : "border-line"}`}
         />
@@ -95,7 +96,7 @@ export function FormTextarea({ label, name, value, onChange, placeholder, requir
         placeholder={placeholder}
         required={required}
         rows={5}
-        className="w-full resize-none rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/35 focus:border-indigo"
+        className="w-full resize-none rounded-md border border-line bg-ivory px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/35 focus:border-indigo focus:bg-white"
       />
     </label>
   );
@@ -111,7 +112,7 @@ export function SubmitButton({ children, loading }: SubmitButtonProps) {
     <button
       type="submit"
       disabled={loading}
-      className="mt-1 rounded-lg bg-indigo px-5 py-3 text-sm font-semibold text-ivory transition-colors hover:bg-indigo-light disabled:opacity-60"
+      className="mt-1 rounded-md bg-indigo px-5 py-3 text-sm font-semibold text-ivory transition-colors hover:bg-indigo-light disabled:opacity-60"
     >
       {loading ? "Please wait…" : children}
     </button>

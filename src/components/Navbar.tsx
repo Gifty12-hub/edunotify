@@ -14,12 +14,12 @@ export default function Navbar() {
   const { isAuthenticated, user } = useAuth();
 
   const linkClass = ({ isActive }: NavLinkRenderProps) =>
-    `text-sm font-medium transition-colors ${
-      isActive ? "text-indigo" : "text-ink/70 hover:text-indigo"
+    `relative text-sm font-medium transition-colors ${
+      isActive ? "text-indigo after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-gold" : "text-ink/70 hover:text-indigo"
     }`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ivory/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-line bg-ivory/95 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <NavLink to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo text-gold">
