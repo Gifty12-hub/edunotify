@@ -8,7 +8,7 @@ const links = [
 ];
 
 export default function Sidebar() {
-  // logout comes straight from the AuthContext — this is the "hook or
+  // logout comes straight from the AuthContext. This is the "hook or
   // context function" the assignment asks for to clear the stored user
   // data globally on sign out.
   const { user, logout } = useAuth();

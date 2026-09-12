@@ -13,7 +13,7 @@ const channels: Channel[] = [
     icon: MessageCircle,
     label: "WhatsApp",
     time: "Just now",
-    message: '"Ama scored 87% in Mathematics this term. Full report card is ready — tap to view."',
+    message: '"Ama scored 87% in Mathematics this term. Full report card is ready, tap to view."',
     accent: "bg-sage",
   },
   {
@@ -27,7 +27,7 @@ const channels: Channel[] = [
     icon: Mail,
     label: "Email",
     time: "Just now",
-    message: "Term 2 Progress Report — Efua Mensah is now available in your parent dashboard.",
+    message: "Term 2 Progress Report. Efua Mensah is now available in your parent dashboard.",
     accent: "bg-clay",
   },
 ];

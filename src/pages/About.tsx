@@ -10,17 +10,17 @@ const pillars: Pillar[] = [
   {
     icon: Target,
     title: "The problem",
-    body: "In many Ghanaian schools, report cards and school updates still travel home in a child's bag — and often don't arrive at all. Parents miss results, fee deadlines and events, and schools have no reliable way to confirm a message was received.",
+    body: "In many Ghanaian schools, report cards and school updates still travel home in a child's bag, and often don't arrive at all. Parents miss results, fee deadlines and events, and schools have no reliable way to confirm a message was received.",
   },
   {
     icon: Sparkles,
     title: "Our approach",
-    body: "EduNotify digitises the school-to-parent link. Once a school uploads results or an update, EduNotify delivers it automatically over whichever channel a parent has chosen — SMS, WhatsApp, email or the app — in the language they understand best.",
+    body: "EduNotify digitises the school to parent link. Once a school uploads results or an update, EduNotify delivers it automatically over whichever channel a parent has chosen, SMS, WhatsApp, email or the app, in the language they understand best.",
   },
   {
     icon: Users2,
     title: "Who it's for",
-    body: "Basic and second-cycle schools that want a dependable, low-effort way to reach every household, and parents and guardians who want to know how their child is doing without waiting on a paper slip.",
+    body: "Basic and second cycle schools that want a dependable, low effort way to reach every household, and parents and guardians who want to know how their child is doing without waiting on a paper slip.",
   },
   {
     icon: Heart,
@@ -40,9 +40,9 @@ export default function About() {
           Closing the gap between the classroom and home
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-ink/65">
-          EduNotify is a web-based platform that helps schools digitally
+          EduNotify is a web based platform that helps schools digitally
           manage student academic records and keep parents informed through
-          SMS, WhatsApp and email notifications — built for the realities of
+          SMS, WhatsApp and email notifications, built for the realities of
           Ghanaian schools, where a smartphone and a stable internet
           connection can't always be assumed.
         </p>
@@ -67,8 +67,8 @@ export default function About() {
         <p className="mt-4 text-sm leading-relaxed text-ink/65">
           EduNotify started as an idea to solve a problem seen firsthand in
           Ghanaian communities: results and school news that never reach the
-          people who need them most. The platform is being built with AI-powered
-          features on the roadmap — including early-warning flags for
+          people who need them most. The platform is being built with AI powered
+          features on the roadmap, including early warning flags for
           students who may need extra support, and automatic translation so
           language is never a barrier between a school and a parent.
         </p>

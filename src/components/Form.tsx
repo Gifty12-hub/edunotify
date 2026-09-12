@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 
 /**
  * Small, composable form primitives shared across Login, Signup and Contact.
- * Kept dependency-free (no form library) since the current scope is UI-only —
+ * Kept dependency free (no form library) since the current scope is UI only,
  * swap the onSubmit handlers for real API calls once the backend is ready.
  */
 

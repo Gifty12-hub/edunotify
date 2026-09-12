@@ -16,7 +16,7 @@ export default function Footer() {
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink/65">
             Digital school communication for Ghana. Results, fee reminders and
-            school updates delivered to parents by SMS, WhatsApp, email or app —
+            school updates delivered to parents by SMS, WhatsApp, email or app,
             in the language they read best.
           </p>
         </div>

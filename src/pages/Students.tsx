@@ -8,7 +8,7 @@ interface StudentRow {
   channel: "SMS" | "WhatsApp" | "Email";
 }
 
-// Placeholder data — this table gets replaced by a real fetch to the
+// Placeholder data. This table gets replaced by a real fetch to the
 // backend once it exists (e.g. GET /api/schools/:id/students).
 const students: StudentRow[] = [
   { name: "Ama Boateng", className: "JHS 2A", guardian: "Efua Boateng", contact: "024 xxx xxxx", channel: "WhatsApp" },
@@ -24,7 +24,7 @@ const channelIcon = {
 
 /**
  * Second authenticated page, proving the sidebar/route pattern supports
- * more than one protected page. This is a placeholder table — the real
+ * more than one protected page. This is a placeholder table. The real
  * version will pull the school's actual roster from the backend.
  */
 export default function Students() {
@@ -33,7 +33,7 @@ export default function Students() {
       <h1 className="font-display text-2xl font-700 text-indigo">Students</h1>
       <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink/60">
         Every student linked to a parent or guardian contact. This is
-        placeholder data — bulk upload and live roster syncing are on the
+        placeholder data. Bulk upload and live roster syncing are on the
         backend roadmap.
       </p>
 

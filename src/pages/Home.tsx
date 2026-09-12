@@ -20,8 +20,8 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: Send,
-    title: "Multi-channel delivery",
-    body: "Results and school updates go out over SMS, WhatsApp, email and the EduNotify app — whichever a parent actually checks.",
+    title: "Multi channel delivery",
+    body: "Results and school updates go out over SMS, WhatsApp, email and the EduNotify app, whichever a parent actually checks.",
   },
   {
     icon: Languages,
@@ -30,13 +30,13 @@ const features: Feature[] = [
   },
   {
     icon: BarChart3,
-    title: "AI-powered insights",
-    body: "Flags at-risk students early and summarises class performance for teachers, so follow-up happens before it's too late.",
+    title: "AI powered insights",
+    body: "Flags at risk students early and summarises class performance for teachers, so follow up happens before it's too late.",
   },
   {
     icon: ShieldCheck,
     title: "Built for Ghanaian schools",
-    body: "Bulk uploads from the systems schools already use, offline-friendly SMS fallback, and pricing that fits real school budgets.",
+    body: "Bulk uploads from the systems schools already use, offline friendly SMS fallback, and pricing that fits real school budgets.",
   },
 ];
 
@@ -44,7 +44,7 @@ const steps: Feature[] = [
   {
     icon: School,
     title: "The school uploads results",
-    body: "A teacher or administrator uploads term results, or a single score, from the dashboard — no new spreadsheet to learn.",
+    body: "A teacher or administrator uploads term results, or a single score, from the dashboard. No new spreadsheet to learn.",
   },
   {
     icon: UserPlus,
@@ -72,7 +72,7 @@ export default function Home() {
           </h1>
           <p className="mt-5 max-w-md text-base leading-relaxed text-ink/65">
             EduNotify helps Ghanaian schools manage student academic records
-            digitally and keep parents informed automatically — by SMS,
+            digitally and keep parents informed automatically by SMS,
             WhatsApp, email or the EduNotify app, in the language they read
             best.
           </p>
@@ -145,7 +145,7 @@ export default function Home() {
               Ready to keep every parent in the loop?
             </h2>
             <p className="mt-2 max-w-md text-sm text-ivory/70">
-              Set up your school's EduNotify account in minutes — no credit
+              Set up your school's EduNotify account in minutes. No credit
               card required for the pilot programme.
             </p>
           </div>

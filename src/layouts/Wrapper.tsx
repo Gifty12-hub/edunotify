@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
 /**
- * Wrapper is the outermost layout every single page shares — public or
+ * Wrapper is the outermost layout every single page shares, public or
  * authenticated. Anything that truly applies everywhere lives here, e.g.
  * scrolling to the top on every route change, or (later) a global toast/
  * notification host. UnauthLayout and AuthLayout each wrap their own

@@ -15,7 +15,7 @@ export interface AppRoute {
 }
 
 /**
- * Public pages — anyone can view these, logged in or not. Rendered inside
+ * Public pages. Anyone can view these, logged in or not. Rendered inside
  * UnauthLayout (Navbar + Footer). Add a new public page by adding one line
  * here; AppRoutes.tsx maps over this array so nothing else needs to change.
  */
@@ -30,7 +30,7 @@ export const publicRoutes: AppRoute[] = [
 ];
 
 /**
- * Protected pages — only reachable once ProtectedRoute confirms the user
+ * Protected pages. Only reachable once ProtectedRoute confirms the user
  * is authenticated. Rendered inside AuthLayout (Sidebar). Add new
  * dashboard pages here as they're built.
  */

@@ -60,7 +60,7 @@ export default function Contact() {
           </span>
           <h2 className="mt-4 font-display text-xl font-700 text-indigo">Message sent</h2>
           <p className="mt-2 text-sm text-ink/60">
-            Thanks for reaching out — we'll get back to you within a couple of days.
+            Thanks for reaching out. We'll get back to you within a couple of days.
           </p>
         </div>
       ) : (

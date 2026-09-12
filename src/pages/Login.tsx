@@ -45,7 +45,7 @@ export default function Signup() {
 
     const result = await request(
       () => signupRequest(values.name, values.email),
-      "Account created — you can now log in"
+      "Account created. You can now log in"
     );
 
     if (result) {

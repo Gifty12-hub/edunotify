@@ -6,7 +6,7 @@ import { FormShell, FormField, SubmitButton } from "../components/Form";
 /**
  * Step 1 of password recovery: the user requests a reset link by email.
  * There's no backend yet, so submitting just simulates the request and
- * shows a confirmation — see the TODO below for what a real integration
+ * shows a confirmation. See the TODO below for what a real integration
  * needs.
  */
 export default function ForgotPassword() {

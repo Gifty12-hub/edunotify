@@ -30,7 +30,7 @@ function readStoredSession(): StoredSession | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as StoredSession) : null;
   } catch {
-    // Corrupt or missing localStorage data — treat as logged out.
+    // Corrupt or missing localStorage data. Treat as logged out.
     return null;
   }
 }
@@ -38,7 +38,7 @@ function readStoredSession(): StoredSession | null {
 /**
  * Global store for "who is logged in." The user + tokens live in React
  * state (so the app re-renders when they change) and are mirrored into
- * localStorage (so a page refresh doesn't log the person out — the
+ * localStorage (so a page refresh doesn't log the person out. The
  * lazy useState initializer below reads localStorage exactly once, on
  * first mount).
  *
