@@ -13,7 +13,7 @@ export default function AuthLayout() {
     <Wrapper>
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 bg-ivory-deep p-6 md:p-10">
+        <main className="flex-1 bg-main p-6 md:p-10">
           <Outlet />
         </main>
       </div>

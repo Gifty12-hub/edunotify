@@ -15,17 +15,17 @@ export default function Navbar() {
 
   const linkClass = ({ isActive }: NavLinkRenderProps) =>
     `relative text-sm font-medium transition-colors ${
-      isActive ? "text-indigo after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-gold" : "text-ink/70 hover:text-indigo"
+      isActive ? "text-white after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-gold" : "text-ivory/75 hover:text-white"
     }`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ivory/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-indigo-light bg-indigo">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <NavLink to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo text-gold">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold text-indigo">
             <BellRing size={18} strokeWidth={2.25} />
           </span>
-          <span className="font-display text-lg font-700 text-indigo">EduNotify</span>
+          <span className="font-display text-lg font-700 text-white">EduNotify</span>
         </NavLink>
 
         {/* Desktop links */}
@@ -39,21 +39,21 @@ export default function Navbar() {
           {isAuthenticated && user ? (
             <NavLink
               to="/dashboard"
-              className="flex items-center gap-2 rounded-full bg-indigo/10 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-indigo transition-colors hover:bg-indigo/15"
+              className="flex items-center gap-2 rounded-full bg-white/10 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-white transition-colors hover:bg-white/15"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo text-xs font-700 text-ivory">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold text-xs font-700 text-indigo">
                 {user.firstName[0]}
               </span>
               {user.firstName}
             </NavLink>
           ) : (
             <>
-              <NavLink to="/login" className="text-sm font-medium text-ink/70 transition-colors hover:text-indigo">
+              <NavLink to="/login" className="text-sm font-medium text-ivory/75 transition-colors hover:text-white">
                 Log in
               </NavLink>
               <NavLink
                 to="/signup"
-                className="rounded-full bg-indigo px-5 py-2.5 text-sm font-semibold text-ivory transition-colors hover:bg-indigo-light"
+                className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-indigo transition-colors hover:bg-gold-light"
               >
                 Get started
               </NavLink>
@@ -63,7 +63,7 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-indigo md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-white md:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -74,7 +74,7 @@ export default function Navbar() {
 
       {/* Mobile panel */}
       {open && (
-        <div className="border-t border-line bg-ivory px-6 pb-6 md:hidden">
+        <div className="border-t border-indigo-light bg-indigo px-6 pb-6 md:hidden">
           <div className="flex flex-col gap-4 pt-4">
             {links.map((l) => (
               <NavLink
@@ -91,22 +91,22 @@ export default function Navbar() {
             {isAuthenticated && user ? (
               <NavLink
                 to="/dashboard"
-                className="flex items-center gap-2 text-sm font-semibold text-indigo"
+                className="flex items-center gap-2 text-sm font-semibold text-white"
                 onClick={() => setOpen(false)}
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo text-xs font-700 text-ivory">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold text-xs font-700 text-indigo">
                   {user.firstName[0]}
                 </span>
                 {user.firstName}
               </NavLink>
             ) : (
               <>
-                <NavLink to="/login" className="text-sm font-medium text-ink/70" onClick={() => setOpen(false)}>
+                <NavLink to="/login" className="text-sm font-medium text-ivory/75" onClick={() => setOpen(false)}>
                   Log in
                 </NavLink>
                 <NavLink
                   to="/signup"
-                  className="rounded-full bg-indigo px-5 py-2.5 text-center text-sm font-semibold text-ivory"
+                  className="rounded-full bg-gold px-5 py-2.5 text-center text-sm font-semibold text-indigo"
                   onClick={() => setOpen(false)}
                 >
                   Get started

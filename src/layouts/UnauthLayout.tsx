@@ -12,7 +12,7 @@ export default function UnauthLayout() {
   return (
     <Wrapper>
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 bg-main">
         <Outlet />
       </main>
       <Footer />
