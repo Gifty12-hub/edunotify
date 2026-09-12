@@ -50,7 +50,7 @@ export default function Dashboard() {
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Active students", value: "248", detail: "+12 this term", icon: Users, tone: "bg-indigo/10 text-indigo" },
-          { label: "Reports shared", value: "186", detail: "75% of students", icon: BookOpenCheck, tone: "bg-gold/20 text-[#9a5b2d]" },
+          { label: "Reports shared", value: "186", detail: "75% of students", icon: BookOpenCheck, tone: "bg-gold/20 text-[#b85f12]" },
           { label: "Parent reach", value: "94%", detail: "+6% this month", icon: MessageCircle, tone: "bg-sage/15 text-sage" },
           { label: "Need attention", value: "8", detail: "Follow up today", icon: Clock3, tone: "bg-clay/10 text-clay" },
         ].map(({ label, value, detail, icon: Icon, tone }) => (

@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #263238;
-  --color-indigo: #28554c;
-  --color-indigo-light: #3f7568;
-  --color-gold: #df8b54;
-  --color-gold-light: #edaa78;
-  --color-clay: #bd5d4d;
-  --color-sage: #5f806b;
-  --color-ivory: #fbf7ef;
-  --color-ivory-deep: #f1eadf;
-  --color-line: #ded4c5;
+  --color-ink: #17324d;
+  --color-indigo: #123b63;
+  --color-indigo-light: #1f5d8f;
+  --color-gold: #f28c28;
+  --color-gold-light: #ffb34f;
+  --color-clay: #d45d43;
+  --color-sage: #2d8c83;
+  --color-ivory: #f7f9fc;
+  --color-ivory-deep: #eaf1f7;
+  --color-line: #cbd8e5;
 
   --font-display: "Avenir Next", "Trebuchet MS", sans-serif;
   --font-body: "Avenir Next", "Trebuchet MS", sans-serif;
