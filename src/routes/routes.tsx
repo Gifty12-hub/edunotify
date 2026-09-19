@@ -7,6 +7,7 @@ import Signup from "../pages/Signup";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import Dashboard from "../pages/Dashboard";
+import ParentDashboard from "../pages/ParentDashboard";
 import Students from "../pages/Students";
 
 export interface AppRoute {
@@ -36,5 +37,6 @@ export const publicRoutes: AppRoute[] = [
  */
 export const protectedRoutes: AppRoute[] = [
   { path: "/dashboard", element: <Dashboard /> },
+  { path: "/dashboard/parent", element: <ParentDashboard /> },
   { path: "/dashboard/students", element: <Students /> },
 ];

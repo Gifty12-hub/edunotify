@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
 import { Menu, X, BellRing } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 const links = [
   { to: "/", label: "Home" },
@@ -42,9 +42,9 @@ export default function Navbar() {
               className="flex items-center gap-2 rounded-full bg-white/10 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-white transition-colors hover:bg-white/15"
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold text-xs font-700 text-indigo">
-                {user.firstName[0]}
+                {user.fullName[0]}
               </span>
-              {user.firstName}
+              {user.fullName.split(" ")[0]}
             </NavLink>
           ) : (
             <>
@@ -95,9 +95,9 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
               >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold text-xs font-700 text-indigo">
-                  {user.firstName[0]}
+                  {user.fullName[0]}
                 </span>
-                {user.firstName}
+                {user.fullName.split(" ")[0]}
               </NavLink>
             ) : (
               <>

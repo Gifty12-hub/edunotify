@@ -1,55 +1,78 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
-import { User, Mail, Phone, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { User, Mail, Phone, Lock, School as SchoolIcon, MapPin } from "lucide-react";
 import { FormShell, FormField, SubmitButton } from "../components/Form";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { registerSchoolRequest } from "../api/authApi";
+import { useAuth } from "../context/useAuth";
+import type { AuthResponse } from "../types/auth";
 
-type Role = "parent" | "school";
-
-interface RoleOption {
-  value: Role;
-  label: string;
-}
-
-const roles: RoleOption[] = [
-  { value: "parent", label: "Parent / Guardian" },
-  { value: "school", label: "School administrator" },
-];
-
+/**
+ * The backend only supports one kind of self-serve signup: a school admin
+ * registering their school (POST /api/auth/register). There is no endpoint
+ * for a parent to create their own account — parent contacts are added by
+ * a school admin from the Students page, not signed up directly. So this
+ * form collects what /register actually needs, instead of the role picker
+ * the old placeholder had.
+ */
 interface SignupValues {
-  name: string;
+  fullName: string;
   email: string;
-  phone: string;
   password: string;
+  schoolName: string;
+  region: string;
+  town: string;
+  contactEmail: string;
+  contactPhone: string;
 }
+
+const initialValues: SignupValues = {
+  fullName: "",
+  email: "",
+  password: "",
+  schoolName: "",
+  region: "",
+  town: "",
+  contactEmail: "",
+  contactPhone: "",
+};
 
 export default function Signup() {
-  const [role, setRole] = useState<Role>("parent");
-  const [values, setValues] = useState<SignupValues>({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-  const [loading, setLoading] = useState(false);
+  const [values, setValues] = useState<SignupValues>(initialValues);
+  const navigate = useNavigate();
+  const { setSession } = useAuth();
+
+  const { loading, isError, errMessage, request } = useApiRequest<AuthResponse>();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    // TODO: wire up to the registration endpoint once the backend exists.
-    setTimeout(() => {
-      setLoading(false);
-      console.log("Signup submitted:", { role, ...values });
-    }, 900);
+
+    const result = await request(
+      () =>
+        registerSchoolRequest(values.fullName, values.email, values.password, {
+          name: values.schoolName,
+          region: values.region,
+          town: values.town,
+          contactEmail: values.contactEmail,
+          contactPhone: values.contactPhone,
+        }),
+      "Account created"
+    );
+
+    if (result) {
+      setSession(result.user, { accessToken: result.token });
+      navigate("/dashboard", { state: { justLoggedIn: true } });
+    }
   };
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <FormShell
-        title="Create your account"
-        subtitle="Tell us who you are so we can set up the right dashboard."
+        title="Register your school"
+        subtitle="Create the school's workspace and your admin account."
         onSubmit={handleSubmit}
         footer={
           <>
@@ -60,51 +83,22 @@ export default function Signup() {
           </>
         }
       >
-        <div className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-ink/80">I am signing up as a</span>
-          <div className="grid grid-cols-2 gap-2">
-            {roles.map((r) => (
-              <button
-                type="button"
-                key={r.value}
-                onClick={() => setRole(r.value)}
-                className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${
-                  role === r.value
-                    ? "border-indigo bg-indigo text-ivory"
-                    : "border-line bg-white text-ink/70 hover:border-indigo/50"
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <FormField
-          label="Full name"
-          name="name"
-          value={values.name}
+          label="Your full name"
+          name="fullName"
+          value={values.fullName}
           onChange={handleChange}
-          placeholder={role === "school" ? "e.g. Kasoa Presby Basic School" : "e.g. Abena Owusu"}
+          placeholder="e.g. Abena Owusu"
           icon={User}
         />
         <FormField
-          label="Email address"
+          label="Your email address"
           type="email"
           name="email"
           value={values.email}
           onChange={handleChange}
           placeholder="you@example.com"
           icon={Mail}
-        />
-        <FormField
-          label="Phone number"
-          type="tel"
-          name="phone"
-          value={values.phone}
-          onChange={handleChange}
-          placeholder="0XX XXX XXXX"
-          icon={Phone}
         />
         <FormField
           label="Password"
@@ -115,6 +109,57 @@ export default function Signup() {
           placeholder="At least 8 characters"
           icon={Lock}
         />
+
+        <div className="mt-2 border-t border-line pt-5">
+          <span className="text-sm font-medium text-ink/80">School details</span>
+        </div>
+
+        <FormField
+          label="School name"
+          name="schoolName"
+          value={values.schoolName}
+          onChange={handleChange}
+          placeholder="e.g. Kasoa Presby Basic School"
+          icon={SchoolIcon}
+        />
+        <FormField
+          label="Region"
+          name="region"
+          value={values.region}
+          onChange={handleChange}
+          placeholder="e.g. Central Region"
+          icon={MapPin}
+        />
+        <FormField
+          label="Town"
+          name="town"
+          value={values.town}
+          onChange={handleChange}
+          placeholder="e.g. Kasoa"
+          icon={MapPin}
+        />
+        <FormField
+          label="School contact email"
+          type="email"
+          name="contactEmail"
+          value={values.contactEmail}
+          onChange={handleChange}
+          placeholder="office@school.edu.gh"
+          icon={Mail}
+        />
+        <FormField
+          label="School contact phone"
+          type="tel"
+          name="contactPhone"
+          value={values.contactPhone}
+          onChange={handleChange}
+          placeholder="0XX XXX XXXX"
+          icon={Phone}
+        />
+
+        {isError && (
+          <p className="rounded-lg bg-clay/10 px-3 py-2 text-sm text-clay">{errMessage}</p>
+        )}
 
         <p className="text-xs leading-relaxed text-ink/50">
           By creating an account you agree to be contacted on the channels

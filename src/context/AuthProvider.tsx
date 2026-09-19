@@ -14,22 +14,10 @@ function readStoredSession(): StoredSession | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as StoredSession) : null;
   } catch {
-    // Corrupt or missing localStorage data. Treat as logged out.
     return null;
   }
 }
 
-/**
- * Global store for "who is logged in." The user + tokens live in React
- * state (so the app re-renders when they change) and are mirrored into
- * localStorage (so a page refresh doesn't log the person out. The
- * lazy useState initializer below reads localStorage exactly once, on
- * first mount).
- *
- * TODO: once a real backend exists, setSession should also be called
- * after verifying the accessToken is still valid, and logout should call
- * a real "invalidate this token" endpoint.
- */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSessionState] = useState<StoredSession | null>(() => readStoredSession());
 
@@ -44,10 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSessionState(null);
   }, []);
 
-  // useMemo keeps this object's identity stable across renders unless
-  // session/setSession/logout actually changed. Without it, every render
-  // of AuthProvider would create a brand-new object, and every component
-  // reading useAuth() would re-render even when nothing meaningful changed.
   const value = useMemo<AuthContextValue>(
     () => ({
       user: session?.user ?? null,
@@ -61,4 +45,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

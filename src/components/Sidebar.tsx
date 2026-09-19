@@ -1,6 +1,6 @@
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
 import { LayoutDashboard, Users, LogOut, BellRing } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 const links = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -30,13 +30,15 @@ export default function Sidebar() {
       {user && (
         <div className="mt-6 flex items-center gap-2.5 rounded-lg bg-white px-3 py-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo text-xs font-700 text-ivory">
-            {user.firstName[0]}
-            {user.lastName[0]}
+            {user.fullName
+              .split(/\s+/)
+              .filter(Boolean)
+              .slice(0, 2)
+              .map((part: string) => part[0])
+              .join("")}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-indigo">
-              {user.firstName} {user.lastName}
-            </p>
+            <p className="truncate text-sm font-semibold text-indigo">{user.fullName}</p>
             <p className="truncate text-xs text-ink/50">{user.email}</p>
           </div>
         </div>

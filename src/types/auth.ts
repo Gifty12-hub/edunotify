@@ -1,29 +1,20 @@
-export interface UserProfile {
-  avatar: string;
-  bio: string;
-}
+// Shape matches what edunotify-backend actually returns from
+// POST /api/auth/register, POST /api/auth/login and GET /api/auth/me.
+// (see backend/routes/auth.js -> publicUser())
 
 export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
+  id: string;
+  school: string;
+  fullName: string;
   email: string;
-  username: string;
-  role: string;
-  isVerified: boolean;
-  profile: UserProfile;
+  role: "admin" | "teacher";
 }
 
 export interface AuthTokens {
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface AuthResponse {
-  success: boolean;
-  message: string;
-  data: {
-    user: User;
-    tokens: AuthTokens;
-  };
+  user: User;
+  token: string;
 }
