@@ -7,7 +7,7 @@ export interface User {
   school: string;
   fullName: string;
   email: string;
-  role: "admin" | "teacher";
+  role: "admin" | "teacher" | "parent";
 }
 
 export interface AuthTokens {

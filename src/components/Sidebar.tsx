@@ -1,10 +1,14 @@
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
-import { LayoutDashboard, Users, LogOut, BellRing } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, BellRing, GraduationCap } from "lucide-react";
 import { useAuth } from "../context/useAuth";
 
-const links = [
+const schoolLinks = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/dashboard/students", label: "Students", icon: Users },
+];
+
+const parentLinks = [
+  { to: "/dashboard", label: "Child progress", icon: GraduationCap },
 ];
 
 export default function Sidebar() {
@@ -12,6 +16,7 @@ export default function Sidebar() {
   // context function" the assignment asks for to clear the stored user
   // data globally on sign out.
   const { user, logout } = useAuth();
+  const links = user?.role === "parent" ? parentLinks : schoolLinks;
 
   const linkClass = ({ isActive }: NavLinkRenderProps) =>
     `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${

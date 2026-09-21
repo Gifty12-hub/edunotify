@@ -9,6 +9,8 @@ import {
   MessageCircle,
   Users,
 } from "lucide-react";
+import ParentDashboard from "./ParentDashboard";
+import { useAuth } from "../context/useAuth";
 
 interface LoginNavState {
   justLoggedIn?: boolean;
@@ -22,8 +24,13 @@ interface LoginNavState {
  * later build phase.
  */
 export default function Dashboard() {
+  const { user } = useAuth();
   const location = useLocation();
   const state = location.state as LoginNavState | null;
+
+  if (user?.role === "parent") {
+    return <ParentDashboard />;
+  }
 
   return (
     <div className="mx-auto max-w-6xl">
