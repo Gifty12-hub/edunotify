@@ -1,14 +1,16 @@
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
-import { LayoutDashboard, Users, LogOut, BellRing, GraduationCap } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, BellRing, BookOpenCheck, Send, GraduationCap } from "lucide-react";
 import { useAuth } from "../context/useAuth";
 
 const schoolLinks = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/dashboard/students", label: "Students", icon: Users },
+  { to: "/dashboard/results", label: "Results", icon: BookOpenCheck },
+  { to: "/dashboard/notifications", label: "Notifications", icon: Send },
 ];
 
 const parentLinks = [
-  { to: "/dashboard", label: "Child progress", icon: GraduationCap },
+  { to: "/dashboard", label: "My children", icon: GraduationCap },
 ];
 
 export default function Sidebar() {

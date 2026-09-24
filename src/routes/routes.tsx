@@ -7,8 +7,9 @@ import Signup from "../pages/Signup";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import Dashboard from "../pages/Dashboard";
-import ParentDashboard from "../pages/ParentDashboard";
 import Students from "../pages/Students";
+import Results from "../pages/Results";
+import Notifications from "../pages/Notifications";
 
 export interface AppRoute {
   path: string;
@@ -30,13 +31,14 @@ export const publicRoutes: AppRoute[] = [
   { path: "/reset-password", element: <ResetPassword /> },
 ];
 
-/**
- * Protected pages. Only reachable once ProtectedRoute confirms the user
- * is authenticated. Rendered inside AuthLayout (Sidebar). Add new
- * dashboard pages here as they're built.
- */
-export const protectedRoutes: AppRoute[] = [
+/** Pages every logged in user can open. The dashboard shows the staff or parent view by role. */
+export const sharedRoutes: AppRoute[] = [
   { path: "/dashboard", element: <Dashboard /> },
-  { path: "/dashboard/parent", element: <ParentDashboard /> },
+];
+
+/** Pages for school staff only (admin and teacher). */
+export const staffRoutes: AppRoute[] = [
   { path: "/dashboard/students", element: <Students /> },
+  { path: "/dashboard/results", element: <Results /> },
+  { path: "/dashboard/notifications", element: <Notifications /> },
 ];

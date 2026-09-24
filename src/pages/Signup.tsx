@@ -167,9 +167,7 @@ export default function Signup() {
         </p>
 
         <p className="rounded-lg bg-sage/10 px-3 py-2 text-xs leading-relaxed text-sage">
-          Are you a parent? Parent accounts are created by the school so your
-          child&apos;s progress stays linked to the right student. Ask your school
-          for your login details, then use the Parent portal on the login page.
+          Are you a parent? Your school creates your login. Ask the school office for your email and password, then log in on the login page.
         </p>
 
         <SubmitButton loading={loading}>Create account</SubmitButton>
