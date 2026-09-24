@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Save, Send } from "lucide-react";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { getResults, getStudents, notifyResults, previewResults, saveResults } from "../lib/api";
+import { whatsAppLink } from "../lib/whatsapp";
 import type { ResultsNotifySummary, ResultsPreview, StudentRecord } from "../types/api";
 
 const inputClass =
@@ -112,6 +113,18 @@ export default function Results() {
                     {preview.loading && "Writing preview…"}
                     {preview.isError && <span className="text-clay">{preview.errMessage}</span>}
                     {preview.data && `${preview.data.message}${preview.data.aiGenerated ? " (AI written, language: " + preview.data.language + ")" : ""}`}
+                  </p>
+                )}
+                {previewFor === s._id && preview.data && (
+                  <p className="mt-1">
+                    <a
+                      href={whatsAppLink(s.parent.phone, preview.data.message)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-sage hover:underline"
+                    >
+                      Open in WhatsApp (free)
+                    </a>
                   </p>
                 )}
               </div>

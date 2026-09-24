@@ -4,6 +4,7 @@ import { useApiRequest } from "../hooks/useApiRequest";
 import { createParentAccount, createStudent, getStudents, sendNotification } from "../lib/api";
 import { languageLabel, type Channel, type Language, type ParentAccount, type StudentRecord } from "../types/api";
 import { useAuth } from "../context/useAuth";
+import { whatsAppLink } from "../lib/whatsapp";
 
 const channelIcon = { sms: Phone, whatsapp: MessageCircle, email: Mail };
 const channelLabel = { sms: "SMS", whatsapp: "WhatsApp", email: "Email" };
@@ -217,6 +218,14 @@ export default function Students() {
                           <button disabled={send.loading} className="rounded-md bg-indigo px-3 py-2 text-xs font-semibold text-ivory disabled:opacity-60">
                             {send.loading ? "Sending…" : "Send"}
                           </button>
+                          <a
+                            href={whatsAppLink(s.parent.phone, message)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-sage px-3 py-2 text-xs font-semibold text-sage hover:bg-sage/10"
+                          >
+                            <MessageCircle size={14} /> Open in WhatsApp (free)
+                          </a>
                         </form>
                       )}
                       {user?.role === "admin" && <PortalAccess student={s} />}
