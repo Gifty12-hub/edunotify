@@ -34,35 +34,42 @@ const channels: Channel[] = [
 
 export default function NotificationShowcase() {
   return (
-    <div className="relative mx-auto w-full max-w-sm">
-      {/* stacked phone card */}
-      <div className="rounded-[-2rem] border border-line bg-indigo p-2 shadow-xl shadow-indigo/20">
+    <div className="relative mx-auto w-full max-w-md">
+      <div className="absolute -right-3 -top-4 h-16 w-16 rounded-full bg-gold-light/80 blur-2xl" aria-hidden="true" />
+      <div className="absolute -left-4 bottom-6 h-20 w-20 rounded-full bg-sage/20 blur-2xl" aria-hidden="true" />
+
+      <div className="relative rounded-4xl border border-line bg-indigo p-2.5 shadow-[0_30px_70px_rgba(18,59,99,0.28)]">
         <div className="rounded-[1.6rem] bg-ivory p-5">
           <div className="flex items-center justify-between border-b border-line pb-3">
-            <span className="font-display text-sm font-700 text-indigo">
-              One result, three channels
-            </span>
-            <span className="h-2 w-2 rounded-full bg-sage" aria-hidden="true" />
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo/55">
+                live update
+              </p>
+              <span className="mt-1 block font-display text-sm font-700 text-indigo">
+                One result, many families
+              </span>
+            </div>
+            <span className="h-2.5 w-2.5 rounded-full bg-sage" aria-hidden="true" />
           </div>
 
           <ul className="mt-4 flex flex-col gap-3">
             {channels.map(({ icon: Icon, label, time, message, accent }, i) => (
               <li
                 key={label}
-                className="notif-in flex gap-3 rounded-xl border border-line bg-white p-3"
+                className="notif-in flex gap-3 rounded-2xl border border-line bg-white p-3 shadow-[0_8px_24px_rgba(23,50,77,0.04)]"
                 style={{ animationDelay: `${i * 0.35}s` }}
               >
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white ${accent}`}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white ${accent}`}
                 >
                   <Icon size={15} />
                 </span>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold text-indigo">{label}</span>
-                    <span className="text-[11px] text-ink/40">{time}</span>
+                    <span className="text-[11px] text-ink/45">{time}</span>
                   </div>
-                  <p className="mt-0.5 text-xs leading-snug text-ink/70">{message}</p>
+                  <p className="mt-1 text-xs leading-snug text-ink/70">{message}</p>
                 </div>
               </li>
             ))}

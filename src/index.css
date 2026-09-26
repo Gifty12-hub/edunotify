@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #17324d;
-  --color-indigo: #123b63;
-  --color-indigo-light: #1f5d8f;
-  --color-gold: #f28c28;
-  --color-gold-light: #ffb34f;
-  --color-clay: #d45d43;
-  --color-sage: #2d8c83;
-  --color-ivory: #f7f9fc;
-  --color-ivory-deep: #eaf1f7;
-  --color-main: #eef4fa;
-  --color-line: #cbd8e5;
+  --color-ink: #1e2d2f;
+  --color-indigo: #234d6b;
+  --color-indigo-light: #3b6d8f;
+  --color-gold: #f2b85c;
+  --color-gold-light: #f7d087;
+  --color-clay: #d77f63;
+  --color-sage: #4f8d7a;
+  --color-ivory: #f8f3ec;
+  --color-ivory-deep: #edf1ea;
+  --color-main: #f4f0e8;
+  --color-line: #dfe4d8;
 
   --font-display: "Avenir Next", "Trebuchet MS", sans-serif;
   --font-body: "Avenir Next", "Trebuchet MS", sans-serif;
@@ -19,13 +19,14 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--color-ivory);
+  background: var(--color-main);
 }
 
 body {
-  background-color: var(--color-ivory);
-  background-image: radial-gradient(var(--color-line) 0.65px, transparent 0.65px);
-  background-size: 22px 22px;
+  background:
+    radial-gradient(circle at top left, rgba(242, 184, 92, 0.18), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(79, 141, 122, 0.12), transparent 20%),
+    var(--color-main);
   color: var(--color-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -44,7 +45,7 @@ a {
 }
 
 ::selection {
-  background: var(--color-gold);
+  background: rgba(242, 184, 92, 0.55);
   color: var(--color-ink);
 }
 
