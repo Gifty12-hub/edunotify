@@ -16,6 +16,7 @@ export interface ParentInfo {
   email?: string;
   preferredChannel: Channel;
   preferredLanguage?: Language;
+  sendListenLink?: boolean;
 }
 
 export interface StudentRecord {

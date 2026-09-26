@@ -1,7 +1,8 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { KeyRound, Mail, MessageCircle, Phone, Send, UserPlus } from "lucide-react";
 import { useApiRequest } from "../hooks/useApiRequest";
-import { createParentAccount, createStudent, getStudents, sendNotification } from "../lib/api";
+import { createParentAccount, createStudent, getStudents, previewVoice, sendNotification } from "../lib/api";
+import ListenButton from "../components/ListenButton";
 import { languageLabel, type Channel, type Language, type ParentAccount, type StudentRecord } from "../types/api";
 import { useAuth } from "../context/useAuth";
 import { whatsAppLink } from "../lib/whatsapp";
@@ -17,9 +18,10 @@ interface NewStudent {
   email: string;
   channel: Channel;
   language: Language;
+  listenLink: boolean;
 }
 
-const emptyForm: NewStudent = { fullName: "", className: "", parentName: "", phone: "", email: "", channel: "sms", language: "en" };
+const emptyForm: NewStudent = { fullName: "", className: "", parentName: "", phone: "", email: "", channel: "sms", language: "en", listenLink: false };
 
 const inputClass =
   "w-full rounded-md border border-line bg-ivory px-3 py-2 text-sm text-ink outline-none focus:border-indigo focus:bg-white";
@@ -96,6 +98,7 @@ export default function Students() {
           email: form.email || undefined,
           preferredChannel: form.channel,
           preferredLanguage: form.language,
+          sendListenLink: form.listenLink,
         },
       })
     );
@@ -156,6 +159,14 @@ export default function Students() {
               <option key={l} value={l}>Messages in {languageLabel[l]}</option>
             ))}
           </select>
+          <label className="flex items-center gap-2 text-sm text-ink/70 md:col-span-2">
+            <input
+              type="checkbox"
+              checked={form.listenLink}
+              onChange={(e) => setForm((f) => ({ ...f, listenLink: e.target.checked }))}
+            />
+            This parent cannot read well. Add a "Listen" link to their messages.
+          </label>
           {add.isError && <p className="text-sm text-clay md:col-span-2">{add.errMessage}</p>}
           <button disabled={add.loading} className="rounded-md bg-gold px-4 py-2.5 text-sm font-semibold text-indigo disabled:opacity-60 md:col-span-2">
             {add.loading ? "Saving…" : "Save student"}
@@ -195,6 +206,7 @@ export default function Students() {
                       <span className="inline-flex items-center gap-1.5 text-ink/65">
                         <Icon size={14} className="text-gold" />
                         {channelLabel[channel]} · {contact} · {languageLabel[s.parent.preferredLanguage ?? "en"]}
+                        {s.parent.sendListenLink ? " · Listen link" : ""}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -218,6 +230,12 @@ export default function Students() {
                           <button disabled={send.loading} className="rounded-md bg-indigo px-3 py-2 text-xs font-semibold text-ivory disabled:opacity-60">
                             {send.loading ? "Sending…" : "Send"}
                           </button>
+                          <ListenButton
+                            load={() => previewVoice(s._id, message)}
+                            disabled={!message.trim()}
+                            label={`Hear it in ${languageLabel[s.parent.preferredLanguage ?? "en"]}`}
+                            showText
+                          />
                           <a
                             href={whatsAppLink(s.parent.phone, message)}
                             target="_blank"

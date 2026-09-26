@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { BellRing, GraduationCap, KeyRound } from "lucide-react";
 import { useApiRequest } from "../hooks/useApiRequest";
-import { changePassword, getPortalChildren, getPortalMessages } from "../lib/api";
+import { changePassword, getNotificationAudio, getPortalChildren, getPortalMessages } from "../lib/api";
+import ListenButton from "../components/ListenButton";
 import { useAuth } from "../context/useAuth";
 import type { PortalChild, PortalMessage } from "../types/api";
 
@@ -99,6 +100,9 @@ export default function ParentDashboard() {
           {messages.map((m) => (
             <div key={m._id} className="py-3 first:pt-0 last:pb-0">
               <p className="text-sm text-ink">{m.message}</p>
+              <div className="mt-2">
+                <ListenButton load={() => getNotificationAudio(m._id)} label="Listen to this message" />
+              </div>
               <p className="mt-1 text-xs text-ink/40">
                 {m.student?.fullName ? `${m.student.fullName} · ` : ""}{new Date(m.createdAt).toLocaleString()}
               </p>

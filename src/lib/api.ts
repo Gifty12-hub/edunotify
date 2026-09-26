@@ -84,7 +84,7 @@ export function getStudents() {
 export function createStudent(body: {
   fullName: string;
   className: string;
-  parent: { fullName: string; phone: string; email?: string; preferredChannel: Channel; preferredLanguage: Language };
+  parent: { fullName: string; phone: string; email?: string; preferredChannel: Channel; preferredLanguage: Language; sendListenLink: boolean };
 }) {
   return apiFetch<{ student: StudentRecord }>("/students", { method: "POST", body });
 }
@@ -150,4 +150,46 @@ export function changePassword(currentPassword: string, newPassword: string) {
     method: "POST",
     body: { currentPassword, newPassword },
   });
+}
+
+/** Audio the backend made, ready to play, plus the exact words that are spoken. */
+export interface AudioResult {
+  url: string;
+  text: string;
+}
+
+async function fetchAudio(path: string, body?: unknown): Promise<AudioResult> {
+  const token = getStoredToken();
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method: body === undefined ? "GET" : "POST",
+      headers: {
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch {
+    throw new ApiError("Couldn't reach the server. Check your connection and try again.", 0);
+  }
+  if (!response.ok) {
+    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+    throw new ApiError(payload?.error || `Request failed (${response.status})`, response.status);
+  }
+  const spoken = response.headers.get("X-Spoken-Text");
+  return {
+    url: URL.createObjectURL(await response.blob()),
+    text: spoken ? decodeURIComponent(spoken) : "",
+  };
+}
+
+/** Teacher hears a message in the parent's language before sending it. */
+export function previewVoice(studentId: string, text: string) {
+  return fetchAudio("/voice/preview", { studentId, text });
+}
+
+/** Hear a message that was already sent. Works for staff and for the parent it was sent to. */
+export function getNotificationAudio(notificationId: string) {
+  return fetchAudio(`/voice/notification/${notificationId}`);
 }

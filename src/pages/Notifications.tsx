@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Megaphone } from "lucide-react";
 import { useApiRequest } from "../hooks/useApiRequest";
-import { broadcastNotification, getNotifications } from "../lib/api";
+import { broadcastNotification, getNotificationAudio, getNotifications } from "../lib/api";
+import ListenButton from "../components/ListenButton";
 import type { BulkSendSummary, NotificationRecord } from "../types/api";
 
 const statusStyle = {
@@ -82,6 +83,9 @@ export default function Notifications() {
               </p>
               <p className="mt-1 line-clamp-2 text-xs text-ink/60">{n.message}</p>
               {n.error && <p className="mt-1 text-xs text-clay">{n.error}</p>}
+              <div className="mt-2">
+                <ListenButton load={() => getNotificationAudio(n._id)} label="Hear it" showText />
+              </div>
             </div>
             <div className="shrink-0 text-right">
               <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${statusStyle[n.status]}`}>{n.status}</span>
