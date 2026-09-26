@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { Save, Send, Plus, X } from "lucide-react";
+import { Save, Send, Plus, X, Download, Upload } from "lucide-react";
 import { useApiRequest } from "../hooks/useApiRequest";
-import { getResults, getStudents, notifyResults, previewResults, saveResults } from "../lib/api";
+import { downloadResultsTemplate, getResults, getStudents, notifyResults, previewResults, saveResults, uploadResults } from "../lib/api";
 import { whatsAppLink } from "../lib/whatsapp";
 import ListenButton from "../components/ListenButton";
 import { previewVoice } from "../lib/api";
-import type { ResultsNotifySummary, ResultsPreview, StudentRecord } from "../types/api";
+import type { ResultsNotifySummary, ResultsPreview, StudentRecord, UploadResultsSummary } from "../types/api";
 
 const inputClass =
   "rounded-md border border-line bg-ivory px-3 py-2 text-sm text-ink outline-none focus:border-indigo focus:bg-white";
@@ -30,6 +30,9 @@ export default function Results() {
   const save = useApiRequest<{ saved: number }>();
   const notify = useApiRequest<ResultsNotifySummary>();
   const preview = useApiRequest<ResultsPreview>();
+  const template = useApiRequest<{ url: string; filename: string }>();
+  const upload = useApiRequest<UploadResultsSummary>();
+  const [file, setFile] = useState<File | null>(null);
 
   const [className, setClassName] = useState("");
   const [term, setTerm] = useState("Term 1");
@@ -92,6 +95,34 @@ export default function Results() {
     0
   );
 
+  const handleDownloadTemplate = async () => {
+    const result = await template.request(() => downloadResultsTemplate({ className, subjects }));
+    if (!result) return;
+    const a = document.createElement("a");
+    a.href = result.url;
+    a.download = result.filename;
+    a.click();
+  };
+
+  const handleUpload = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+    const result = await upload.request(() => uploadResults(file, { term, academicYear, className, subjects }));
+    if (result) {
+      setFile(null);
+      // Reload the grid so the newly uploaded scores show up.
+      const r = await getResults({ className, term, academicYear });
+      const grid: ScoreGrid = {};
+      const found = new Set<string>();
+      for (const row of r.results) {
+        found.add(row.subject);
+        grid[row.student._id] = { ...grid[row.student._id], [row.subject]: String(row.score) };
+      }
+      setScores(grid);
+      setSubjects((current) => [...current, ...[...found].filter((s) => !current.includes(s))]);
+    }
+  };
+
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     notify.reset();
@@ -151,6 +182,64 @@ export default function Results() {
               <Plus size={12} /> Add
             </button>
           </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-white p-4">
+            <button
+              type="button"
+              onClick={handleDownloadTemplate}
+              disabled={template.loading || subjects.length === 0}
+              className="inline-flex items-center gap-2 rounded-md border border-indigo/30 px-3 py-2 text-xs font-semibold text-indigo hover:bg-indigo/5 disabled:opacity-50"
+            >
+              <Download size={14} /> {template.loading ? "Preparing…" : "Download blank sheet (CSV)"}
+            </button>
+            {template.isError && <p className="text-xs text-clay">{template.errMessage}</p>}
+
+            <form onSubmit={handleUpload} className="flex flex-wrap items-center gap-2">
+              <input
+                type="file"
+                accept=".csv,text/csv"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="text-xs text-ink/70 file:mr-2 file:rounded-md file:border-0 file:bg-ivory-deep file:px-2 file:py-1.5 file:text-xs file:font-semibold file:text-ink"
+              />
+              <button
+                type="submit"
+                disabled={!file || upload.loading}
+                className="inline-flex items-center gap-2 rounded-md bg-sage px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+              >
+                <Upload size={14} /> {upload.loading ? "Uploading…" : "Upload filled sheet"}
+              </button>
+            </form>
+          </div>
+          <p className="mt-1 text-xs text-ink/50">
+            Download the sheet, fill in scores in Excel or Google Sheets, save it as CSV, then upload it here. Keep the student names exactly as shown.
+          </p>
+
+          {upload.isError && <p className="mt-2 text-sm text-clay">{upload.errMessage}</p>}
+          {upload.data && (
+            <div className="mt-2 rounded-lg bg-ivory p-3 text-xs text-ink/70">
+              <p className="font-semibold text-sage">Saved {upload.data.saved} score{upload.data.saved === 1 ? "" : "s"}.</p>
+              {upload.data.skippedRows.length > 0 && (
+                <div className="mt-2">
+                  <p className="font-semibold text-clay">Rows not saved:</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {upload.data.skippedRows.map((r, i) => (
+                      <li key={i}>Row {r.row} ({r.name}): {r.reason}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {upload.data.skippedCells.length > 0 && (
+                <div className="mt-2">
+                  <p className="font-semibold text-clay">Scores not saved:</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {upload.data.skippedCells.map((c, i) => (
+                      <li key={i}>Row {c.row} ({c.name}), {c.subject}: {c.reason}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
 
           {existing.loading && <p className="mt-4 text-sm text-ink/50">Loading any saved scores…</p>}
 

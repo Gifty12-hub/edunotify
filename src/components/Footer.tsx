@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BellRing, Mail, MessageCircle, Phone } from "lucide-react";
+import { whatsAppLink } from "../lib/whatsapp";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -39,13 +40,27 @@ export default function Footer() {
           </h3>
           <ul className="mt-4 space-y-3 text-sm text-ivory/70">
             <li className="flex items-center gap-2">
-              <Mail size={15} className="text-gold" /> hello@edunotify.gh
+              <Mail size={15} className="text-gold" />
+              <a href="mailto:demo.edunotify@gmail.com" className="hover:text-gold focus-visible:text-gold focus-visible:outline-none focus-visible:underline">
+                demo.edunotify@gmail.com
+              </a>
             </li>
             <li className="flex items-center gap-2">
-              <Phone size={15} className="text-gold" /> +233 20 000 0000
+              <Phone size={15} className="text-gold" />
+              <a href="tel:+233534721702" className="hover:text-gold focus-visible:text-gold focus-visible:outline-none focus-visible:underline">
+                +233 534721702
+              </a>
             </li>
             <li className="flex items-center gap-2">
-              <MessageCircle size={15} className="text-gold" /> WhatsApp support
+              <MessageCircle size={15} className="text-gold" />
+              <a
+                href={whatsAppLink("+233 534721702", "Hello, I need support with EduNotify.")}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-gold focus-visible:text-gold focus-visible:outline-none focus-visible:underline"
+              >
+                WhatsApp support
+              </a>
             </li>
           </ul>
         </div>

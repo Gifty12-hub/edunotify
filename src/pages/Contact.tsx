@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Mail, Phone, MapPin, User } from "lucide-react";
 import { FormShell, FormField, FormTextarea, SubmitButton } from "../components/Form";
+import { sendContactMessage } from "../lib/api";
 
 interface ContactValues {
   name: string;
@@ -12,20 +13,30 @@ export default function Contact() {
   const [values, setValues] = useState<ContactValues>({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const message = values.message.trim();
+    if (!values.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()) || !message) {
+      setError("Enter your name, a valid email address, and a message.");
+      return;
+    }
+
     setLoading(true);
-    // TODO: send to a contact-form endpoint (or email service) once available.
-    setTimeout(() => {
+    setError("");
+    try {
+      await sendContactMessage({ ...values, name: values.name.trim(), email: values.email.trim(), message });
       setLoading(false);
       setSent(true);
-      console.log("Contact form submitted:", values);
-    }, 900);
+    } catch (err) {
+      setLoading(false);
+      setError(err instanceof Error ? err.message : "We couldn't send your message. Please try again.");
+    }
   };
 
   return (
@@ -40,11 +51,11 @@ export default function Contact() {
         <ul className="mt-8 flex flex-col gap-5 text-sm text-ink/70">
           <li className="flex items-start gap-3">
             <Mail size={17} className="mt-0.5 text-gold" />
-            <span>hello@edunotify.gh</span>
+            <span>demo.edunotify@gmail.com</span>
           </li>
           <li className="flex items-start gap-3">
             <Phone size={17} className="mt-0.5 text-gold" />
-            <span>+233 20 000 0000</span>
+            <span>+233 534721702</span>
           </li>
           <li className="flex items-start gap-3">
             <MapPin size={17} className="mt-0.5 text-gold" />
@@ -60,7 +71,7 @@ export default function Contact() {
           </span>
           <h2 className="mt-4 font-display text-xl font-700 text-indigo">Message sent</h2>
           <p className="mt-2 text-sm text-ink/60">
-            Thanks for reaching out. We'll get back to you within a couple of days.
+            Thanks for reaching out. A confirmation email is on its way, and we'll get back to you within a couple of days.
           </p>
         </div>
       ) : (
@@ -89,6 +100,7 @@ export default function Contact() {
             onChange={handleChange}
             placeholder="How can we help?"
           />
+          {error && <p role="alert" className="text-sm text-clay">{error}</p>}
           <SubmitButton loading={loading}>Send message</SubmitButton>
         </FormShell>
       )}

@@ -5,7 +5,7 @@
 // to think about auth headers.
 
 import type {
-  Channel, Language, NotificationRecord, PortalChild, PortalMessage, ResultsPreview, ParentAccount, ResultRecord, StatsResponse, StudentRecord, BulkSendSummary, ResultsNotifySummary,
+  Channel, Language, NotificationRecord, PortalChild, PortalMessage, ResultsPreview, ParentAccount, ResultRecord, StatsResponse, StudentRecord, BulkSendSummary, ResultsNotifySummary, UploadResultsSummary,
 } from "../types/api";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -75,6 +75,14 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   }
 
   return payload as T;
+}
+
+export function sendContactMessage(body: { name: string; email: string; message: string }) {
+  return apiFetch<{ message: string }>("/contact", {
+    method: "POST",
+    skipAuth: true,
+    body,
+  });
 }
 
 export function getStudents() {
@@ -192,4 +200,55 @@ export function previewVoice(studentId: string, text: string) {
 /** Hear a message that was already sent. Works for staff and for the parent it was sent to. */
 export function getNotificationAudio(notificationId: string) {
   return fetchAudio(`/voice/notification/${notificationId}`);
+}
+
+/** Downloads a blank CSV of the class roster with one column per subject, ready to fill in. */
+export async function downloadResultsTemplate(params: { className: string; subjects: string[] }) {
+  const token = getStoredToken();
+  const q = new URLSearchParams({ className: params.className, subjects: params.subjects.join(",") });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}/results/template?${q.toString()}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+  } catch {
+    throw new ApiError("Couldn't reach the server. Check your connection and try again.", 0);
+  }
+  if (!response.ok) {
+    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+    throw new ApiError(payload?.error || `Request failed (${response.status})`, response.status);
+  }
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition") || "";
+  const match = /filename="([^"]+)"/.exec(disposition);
+  return { url: URL.createObjectURL(blob), filename: match?.[1] ?? "results-template.csv" };
+}
+
+/** Uploads a filled-in results CSV for one class, term and year. */
+export async function uploadResults(
+  file: File,
+  body: { term: string; academicYear: string; className: string; subjects: string[] }
+) {
+  const token = getStoredToken();
+  const form = new FormData();
+  form.append("file", file);
+  form.append("term", body.term);
+  form.append("academicYear", body.academicYear);
+  form.append("className", body.className);
+  form.append("subjects", body.subjects.join(","));
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}/results/upload`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    });
+  } catch {
+    throw new ApiError("Couldn't reach the server. Check your connection and try again.", 0);
+  }
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new ApiError((payload as { error?: string } | null)?.error || `Request failed (${response.status})`, response.status);
+  }
+  return payload as UploadResultsSummary;
 }

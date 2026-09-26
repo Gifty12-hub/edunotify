@@ -101,3 +101,22 @@ export interface ParentAccount {
   tempPassword: string;
   reset: boolean;
 }
+
+export interface UploadSkippedRow {
+  row: number;
+  name: string;
+  reason: string;
+}
+
+export interface UploadSkippedCell {
+  row: number;
+  name: string;
+  subject: string;
+  reason: string;
+}
+
+export interface UploadResultsSummary {
+  saved: number;
+  skippedRows: UploadSkippedRow[];
+  skippedCells: UploadSkippedCell[];
+}
